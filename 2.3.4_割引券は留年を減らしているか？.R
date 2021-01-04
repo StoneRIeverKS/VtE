@@ -1,5 +1,8 @@
 #留年と進級の傾向を箱ひげ図で表示する
 
+##wdの設定
+wd = "C:\\Users\\stone\\Documents\\統計\\効果検証入門\\code"
+setwd(wd)
 ##ggplot2のインストールと読み込み
 install.packages("ggplot2")
 library("ggplot2")
@@ -17,8 +20,21 @@ need_voucher_results = df_results %>%
   arrange(model_index)
   
 ##グラフの描画
-ryunen_sinkyu = ggplot(data = need_voucher_results, mapping = aes(x = model_index, y = estimate)) + 
+ryunen_sinkyu = need_voucher_results %>%
+  ggplot(mapping = aes(x = model_index, y = estimate)) + 
   geom_point() +
-  geom_hline(yintercept=0)
+  geom_hline(yintercept=0) +
+  geom_errorbar(aes(ymax = estimate + std.error*1.96,
+                    ymin = estimate - std.error*1.96,
+                    width = 0.1)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5),
+        legend.position = "bottom",
+        plot.margin = margin(0.5,1,0.5,1, "cm"))
 
-https://qiita.com/Hiroyuki1993/items/5a1a3331e5c8c79d9c9d
+##グラフの保存
+ggsave(file = "ryunen_sinkyu.png", plot = ryunen_sinkyu)
+
+
+  
+    
