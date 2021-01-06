@@ -1,5 +1,7 @@
 #性別差による効果の差の検定
 ##ライブラリの読み込み
+library(ggplot2)
+library(gridExtra)
 library(experimentdatar)
 library(broom)
 library(tidyverse)
@@ -69,3 +71,31 @@ df_results_men = df_models_men %>%
   mutate(formula = as.character(formula)) %>%
   mutate(formula, model_index, lm_result) %>%
   unnest(cols = c(lm_result))
+
+#グラフの描画
+##グラフの描画
+###推定結果に性別のフラグをつけて結合する
+df_results_male = df_results_men %>%
+  mutate(sex = "male")
+
+df_results_female = df_results_women %>%
+  mutate(sex = "female")
+###結合
+df_results_sexFlg = rbind(df_results_male, df_results_female)
+
+###グラフを作成
+result_plot = df_results_sexFlg %>%
+  filter(str_detect(model_index, "PRSCHA_1_covariate|USNGSCH_covariate"), term == "VOUCH0") %>%
+  ggplot(mapping = aes(x = model_index, y = estimate)) + 
+  geom_point() +
+  geom_hline(yintercept=0, linetype = "dashed") +
+  geom_errorbar(aes(ymax = estimate + std.error*1.96,
+                    ymin = estimate - std.error*1.96,
+                    width = 0.1)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text.y = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5),
+        legend.position = "bottom",
+        plot.margin = margin(0.5,1,0.5,1, "cm")) +
+  facet_grid(sex~.) +
+  labs(title = "通学傾向")
