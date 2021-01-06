@@ -28,7 +28,7 @@ formula_y = c("TOTSCYRS",
               "MARRIED",
               "HASCHILD",
               "HOURSUM",
-              "WORKING",
+              "WORKING3",
               "REPT6")
 
 ##共変量を含まない回帰式
