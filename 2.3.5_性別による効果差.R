@@ -1,4 +1,6 @@
 #性別差による効果の差の検定
+wd = "C:\\Users\\stone\\Documents\\統計\\効果検証入門"
+setwd(wd)
 ##ライブラリの読み込み
 library(ggplot2)
 library(gridExtra)
@@ -83,8 +85,8 @@ df_results_female = df_results_women %>%
 ###結合
 df_results_sexFlg = rbind(df_results_male, df_results_female)
 
-###グラフを作成
-result_plot = df_results_sexFlg %>%
+###図2.5のグラフを作成
+result_plot2.5 = df_results_sexFlg %>%
   filter(str_detect(model_index, "PRSCHA_1_covariate|USNGSCH_covariate"), term == "VOUCH0") %>%
   ggplot(mapping = aes(x = model_index, y = estimate)) + 
   geom_point() +
@@ -99,3 +101,45 @@ result_plot = df_results_sexFlg %>%
         plot.margin = margin(0.5,1,0.5,1, "cm")) +
   facet_grid(sex~.) +
   labs(title = "通学傾向")
+
+#グラフの保存
+ggsave(file = "result_plot2_5.png", plot = result_plot2.5)
+
+
+###図2.6のグラフ作成
+y_str = "FINISH6_covariate|FINISH7_covariate|FINISH8_covariate|INSCHI_covariate|NREPT_covariate|PRSCH_C_covariate|REPT_covariate|REPT6_covariate|TOTSCYRS_covariate"
+result_plot2.6 = df_results_sexFlg %>%
+  filter(str_detect(model_index, y_str), term == "VOUCH0") %>%
+  ggplot(mapping = aes(x = model_index, y = estimate)) + 
+  geom_point() +
+  geom_hline(yintercept=0, linetype = "dashed") +
+  geom_errorbar(aes(ymax = estimate + std.error*1.96,
+                    ymin = estimate - std.error*1.96,
+                    width = 0.1)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text.y = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5),
+        legend.position = "bottom",
+        plot.margin = margin(0.5,1,0.5,1, "cm")) +
+  facet_grid(sex~.)
+#グラフの保存
+ggsave(file = "result_plot2_6.png", plot = result_plot2.6)
+
+#図2.7を作成
+result_plot2.7 = df_results_sexFlg %>%
+  filter(str_detect(model_index, y_str), term == "VOUCH0") %>%
+  ggplot(mapping = aes(x = model_index, y = estimate)) + 
+  geom_point() +
+  geom_hline(yintercept=0, linetype = "dashed") +
+  geom_errorbar(aes(ymax = estimate + std.error*1.96,
+                    ymin = estimate - std.error*1.96,
+                    width = 0.1)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text.y = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5),
+        legend.position = "bottom",
+        plot.margin = margin(0.5,1,0.5,1, "cm")) +
+  facet_grid(~sex)
+
+#グラフの保存
+ggsave(file = "result_plot2_7.png", plot = result_plot2.7)
