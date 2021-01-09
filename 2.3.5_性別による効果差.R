@@ -107,7 +107,7 @@ ggsave(file = "result_plot2_5.png", plot = result_plot2.5)
 
 
 ###図2.6のグラフ作成
-y_str = "FINISH6_covariate|FINISH7_covariate|FINISH8_covariate|INSCHI_covariate|NREPT_covariate|PRSCH_C_covariate|REPT_covariate|REPT6_covariate|TOTSCYRS_covariate"
+y_str = "FINISH6_covariate|FINISH7_covariate|FINISH8_covariate|INSCHL_covariate|NREPT_covariate|PRSCH_C_covariate|REPT_covariate|REPT6_covariate|TOTSCYRS_covariate"
 result_plot2.6 = df_results_sexFlg %>%
   filter(str_detect(model_index, y_str), term == "VOUCH0") %>%
   ggplot(mapping = aes(x = model_index, y = estimate)) + 
@@ -127,7 +127,7 @@ ggsave(file = "result_plot2_6.png", plot = result_plot2.6)
 
 #図2.7を作成
 result_plot2.7 = df_results_sexFlg %>%
-  filter(str_detect(model_index, y_str), term == "VOUCH0") %>%
+  filter(model_index == "HOURSUM_covariate", term == "VOUCH0") %>%
   ggplot(mapping = aes(x = model_index, y = estimate)) + 
   geom_point() +
   geom_hline(yintercept=0, linetype = "dashed") +
