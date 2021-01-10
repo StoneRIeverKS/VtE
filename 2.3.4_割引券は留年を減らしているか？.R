@@ -19,7 +19,7 @@ need_voucher_results = df_results %>%
   mutate(upper = estimate+1.96*std.error, lower = estimate-1.96*std.error) %>%
   arrange(model_index)
   
-##グラフの描画
+##図2.4の作成
 ryunen_sinkyu = need_voucher_results %>%
   ggplot(mapping = aes(x = model_index, y = estimate)) + 
   geom_point() +
